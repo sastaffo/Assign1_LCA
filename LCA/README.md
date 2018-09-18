@@ -1,8 +1,8 @@
-># Development Task 1
->## Lowest Common Ancestor
->
->
->**Brief:**
+# Development Task 1
+# Lowest Common Ancestor
+
+
+## Brief:
 >To provide a program solution to the [Lowest Common Ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) problem. You are to implement a solution to the basic problem.
 >+You may assume that the graph is structured as a "binary tree" (as you explore the problem, you may find that this simplification helps you reach a solution). You will find a great deal of sample code on how to solve this problem.
 >+It is not enough simply to find and hack together a solution and submit it to me. My interest (and grading approach) is in how you build and validate your solution. This is now your opportunity to follow this model.
@@ -34,14 +34,16 @@
 
 ***
 
-# My Approach
+## My Approach
 I plan to write this code and its unit tests in Python. I have never used Python before.
 1. I will read about unit testing in Python
 2. I will sketch a few binary trees with nodes selected and their LCA marked. I will try to include as many edge cases as I can, such as cases where:
-..a. one of the selected nodes is the LCA
-..b. the selected nodes are the same
-..c. one of the selected nodes is not in the graph
-..d.
+   1. one of the selected nodes is the LCA
+   2. the selected nodes are the same
+   3. one of the selected nodes is not in the graph
 3. I will construct tests for each of the sample graphs I have drawn
 4. I will construct a `Node` class and a `BinaryTree` class and the necessary functionality to pass the tests
 5. I will run the tests and correct the classes as needed.
+
+## Design Decisions
+1. A node can be its own Lowest Common Ancestor if the other node(s) is/are a) itself b) not valid or c) a descendent of the node
