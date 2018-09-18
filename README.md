@@ -9,15 +9,16 @@
 >
 >
 >**You will be graded based on your adherence to the following procedure:**
->+Choose a unit testing framework. A comprehensive by language list is available [here](https://en.wikipedia.org/wiki/List_of_unit_testing_frameworks).
 >
->+Create a repository on a git service such as GitHub. Your work will be implemented in this repository.
+>-Choose a unit testing framework. A comprehensive by language list is available [here](https://en.wikipedia.org/wiki/List_of_unit_testing_frameworks).
 >
->+Define a set of initial unit tests that capture the basic expected behaviour. This will require you to create sample data and also to identify the basic API for your solution.
+>-Create a repository on a git service such as GitHub. Your work will be implemented in this repository.
 >
->+Build your initial solution, testing it against your test code until it is working.
+>-Define a set of initial unit tests that capture the basic expected behaviour. This will require you to create sample data and also to identify the basic API for your solution.
 >
->+Refine the solution, expanding your test cases to deal with awkward parameters and edge cases that push the limits of your solution, enhancing your solution to deal with these.
+>-Build your initial solution, testing it against your test code until it is working.
+>
+>-Refine the solution, expanding your test cases to deal with awkward parameters and edge cases that push the limits of your solution, enhancing your solution to deal with these.
 >
 >An obvious question will probably arise for you in reading this: how do I know that I have written sufficient test code? Well, that's for you to decide. You are done, when you believe no parameter set passed to your code could break it in a way that your test code does not already capture. You will be assessed based on a concept known as [code coverage](https://en.wikipedia.org/wiki/Code_coverage).
 >
