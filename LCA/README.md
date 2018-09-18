@@ -35,3 +35,13 @@
 ***
 
 # My Approach
+I plan to write this code and its unit tests in Python. I have never used Python before.
+1. I will read about unit testing in Python
+2. I will sketch a few binary trees with nodes selected and their LCA marked. I will try to include as many edge cases as I can, such as cases where:
+..a. one of the selected nodes is the LCA
+..b. the selected nodes are the same
+..c. one of the selected nodes is not in the graph
+..d.
+3. I will construct tests for each of the sample graphs I have drawn
+4. I will construct a `Node` class and a `BinaryTree` class and the necessary functionality to pass the tests
+5. I will run the tests and correct the classes as needed.
