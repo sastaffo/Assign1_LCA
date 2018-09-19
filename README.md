@@ -4,7 +4,9 @@
 
 ## Brief:
 >To provide a program solution to the [Lowest Common Ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) problem. You are to implement a solution to the basic problem.
+>
 >+You may assume that the graph is structured as a "binary tree" (as you explore the problem, you may find that this simplification helps you reach a solution). You will find a great deal of sample code on how to solve this problem.
+>
 >+It is not enough simply to find and hack together a solution and submit it to me. My interest (and grading approach) is in how you build and validate your solution. This is now your opportunity to follow this model.
 >
 >
@@ -47,4 +49,5 @@ I plan to write this code and its unit tests in Python. I have never used Python
 5. I will run the tests and correct the classes as needed.
 
 ## Design Decisions
-1. A node can be its own Lowest Common Ancestor if the other node(s) is/are a) itself b) not valid or c) a descendent of the node
+1. A node can be its own Lowest Common Ancestor if the other node(s) is/are a) itself b) a descendent of the node
+2. If one of the nodes is not in the graph, the function will return an error
