@@ -5,9 +5,9 @@
 ## Brief:
 >To provide a program solution to the [Lowest Common Ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) problem. You are to implement a solution to the basic problem.
 >
->+You may assume that the graph is structured as a "binary tree" (as you explore the problem, you may find that this simplification helps you reach a solution). You will find a great deal of sample code on how to solve this problem.
+>-You may assume that the graph is structured as a "binary tree" (as you explore the problem, you may find that this simplification helps you reach a solution). You will find a great deal of sample code on how to solve this problem.
 >
->+It is not enough simply to find and hack together a solution and submit it to me. My interest (and grading approach) is in how you build and validate your solution. This is now your opportunity to follow this model.
+>-It is not enough simply to find and hack together a solution and submit it to me. My interest (and grading approach) is in how you build and validate your solution. This is now your opportunity to follow this model.
 >
 >
 >**You will be graded based on your adherence to the following procedure:**
@@ -44,9 +44,10 @@ I plan to write this code and its unit tests in Python. I have never used Python
    1. one of the selected nodes is the LCA
    2. the selected nodes are the same
    3. one of the selected nodes is not in the graph
-3. I will construct tests for each of the sample graphs I have drawn
-4. I will construct a `Node` class and a `BinaryTree` class and the necessary functionality to pass the tests
-5. I will run the tests and correct the classes as needed.
+3. I will write function headers for functions that I need in the `BinaryTree` and `Node` classes
+4. I will construct tests for each of the sample graphs I have drawn
+5. I will write the functions in the `Node` and `BinaryTree` classes, ensuring they have the necessary functionality to pass the tests
+6. I will run the tests and correct the classes and methods as needed.
 
 ## Design Decisions
 1. A node can be its own Lowest Common Ancestor if the other node(s) is/are a) itself b) a descendent of the node
