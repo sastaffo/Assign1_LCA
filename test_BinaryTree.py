@@ -44,4 +44,13 @@ class TestBinaryTree(unittest.TestCase):
 
     def test_find_LCA(self):
 	# END test_find_LCA
+
+	def test_find_LCA_invalid(self):
+	# END test_find_LCA_invalid
+
+	def test_find_LCA_self(self):
+	# END test_find_LCA_self
+
+	def test_find_LCA_same(self):
+	# END test_find_LCA_same
 # END TestBinaryTree
