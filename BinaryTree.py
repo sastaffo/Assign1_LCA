@@ -18,7 +18,8 @@ class BinaryTree:
 
 
 class Node:
-    def ___init___(self):
+    def ___init___(self, value):
+		self.value = value
         self.is_parent = False
 	# END ___init___
 
