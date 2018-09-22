@@ -39,6 +39,11 @@ class TestBinaryTree(unittest.TestCase):
         self.binary_tree.head.add_right_child(Node('C'))
         self.binary_tree.head.left_child.add_left_child(Node('D'))
         self.binary_tree.head.left_child.add_right_child(Node('E'))
+        #          'A'
+        #         /  \
+        #      'B'   'C'
+        #     /  \
+        #  'D'   'E'
     # END setUp
 
 
