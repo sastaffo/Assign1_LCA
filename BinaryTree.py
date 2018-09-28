@@ -47,20 +47,23 @@ class BinaryTree:
 		return False
 	# END __compare_nodes
 
-	def contains(self, node):
+	def contains(self, goal_node):
 		# checks if node with passed key is in the tree, returns boolean
-		return self.__contains_rec(node, self.head)
+		return self.__contains_rec(goal_node, self.head)
 	# END contains
 
-	def __contains_rec(self, node, currentNode):
+	def __contains_rec(self, goal_node, currentNode):
 		#recursively finds the node with the passed key
 		if currentNode == None: return None
-		if node.key == currentNode.key: return currentNode
+		if goal_node.equals(currentNode): return currentNode
 
 		if currentNode.is_parent:
-			node_tmp = self.__contains_rec(node.key, currentNode.left_child)
-			if node_tmp == None: node_tmp = self.__contains_rec(node.key, currentNode.right_child)
-			return node_tmp
+			found_node = self.__contains_rec(goal_node, currentNode.left_child)
+			if found_node == None:
+				found_node = self.__contains_rec(
+								goal_node, currentNode.right_child)
+			# END if
+			return found_node
 		# END if
 		return None
 	# END __contains_rec
