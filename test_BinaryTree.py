@@ -12,12 +12,29 @@ class TestNode(unittest.TestCase):
 	# END setUp
 
 	def test_equals(self):
+		self.assertFalse(self.node.equals(None))
 		self.assertTrue(self.node.equals(Node('A')))
 		self.assertFalse(self.node.equals(Node('E')))
 
 	def test_is_parent(self):
 		self.assertFalse(self.node.is_parent)
+		self.node.add_left_child(None)
+		# node should not be a parent if a None child is added
+		self.assertFalse(self.node.is_parent)
+
 		self.node.add_left_child(Node('B'))
+		self.assertTrue(self.node.is_parent)
+
+		self.node.add_left_child(None)
+		# node should not be parent is child has been replaced with None
+		self.assertFalse(self.node.is_parent)
+
+		self.node.add_left_child(Node('B'))
+		self.node.add_right_child(Node('C'))
+		self.assertTrue(self.node.is_parent)
+
+		self.node.add_left_child(None)
+		# node should still be parent if only one child is replaced with None
 		self.assertTrue(self.node.is_parent)
 	# END test_is_parent
 
@@ -51,9 +68,31 @@ class TestBinaryTree(unittest.TestCase):
 	# END setUp
 
 
-	# def test_init(self):
+	def test_equals(self):
+		self.assertFalse(self.binary_tree.equals(None))
+		tree = BinaryTree(Node('A'))
+		tree.head.add_left_child(Node('B'))
+		# contains some but not all nodes found in self.binary_tree
+		self.assertFalse(self.binary_tree.equals(tree))
 
-	# END test_init
+		tree.head.add_right_child(Node('C'))
+		tree.head.left_child.add_left_child(Node('D'))
+		tree.head.left_child.add_right_child(Node('E'))
+		# contains all notes from self.binary_tree in the right order
+		self.assertTrue(self.binary_tree.equals(tree))
+
+		tree.head.right_child.add_left_child(Node('F'))
+		# contains all nodes from self.binary_tree and one other
+		self.assertFalse(self.binary_tree.equals(tree))
+
+		tree = BinaryTree(Node('A'))
+		tree.head.add_left_child(Node('C'))
+		tree.head.add_right_child(Node('B'))
+		tree.head.left_child.add_left_child(Node('D'))
+		tree.head.left_child.add_right_child(Node('E'))
+		# contains all nodes from self.binary_tree in the wrong order
+		self.assertFalse(self.binary_tree.equals(tree))
+	# END test_equals
 
 	def test_contains(self):
 		 # test for head
