@@ -71,7 +71,7 @@ class BinaryTree:
 	def find_LCA(self, p, q):
 		p_found = self.contains(p)
 		q_found = self.contains(q)
-		if p_found is None or q_found is None
+		if p_found is None or q_found is None:
 			return None
 		return self.__find_LCA(self.head, p, q)
 	# END find_LCA
