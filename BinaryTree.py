@@ -67,38 +67,42 @@ class BinaryTree:
 	# code adapted from https://stackoverflow.com/a/46454780
 	def find_LCA(self, root, p, q):
 		# finds the LCA of the 2 nodes passed, returns node that is LCA
-		flag=0
 		if root is None: return None
+		flag=0
 		if p.key == root.key or q.key == root.key:
 			flag=1
-			#return root
+			#indicates later to return root
+		# END if
 
-		left_subtree = self.find_LCA(root.left_child, p, q)
-		right_subtree = self.find_LCA(root.right_child, p, q)
+		left = self.find_LCA(root.left_child, p, q)
+		right = self.find_LCA(root.right_child, p, q)
 
-		if left_subtree is None and right_subtree is None:
+		if left is None and right is None:
 			if flag==0: return None
+			# else flag == 1
 			return root
 
-		if left_subtree is not None and right_subtree is not None:
+		if left is not None and right is not None:
 			return root
 
-		if left_subtree is None:
+		if left is None:
 			if flag==1:
-				if ((right_subtree.value!=p and right_subtree.value!=q) or
-						right_subtree.value==root.value):
-					return right_subtree
-				if right_subtree.value!=root.value:
+				if ((!right.equals(p) and !right.equals(q)) or
+						right.equals(root)):
+					return right
+				if !right.equals(root):
 					return root
-				return right_subtree
-		# else right_subtree is None
+			# else flag != 1
+			return right
+
+		# else right is None:
 		if flag==1:
-			if ((left_subtree.key!=p and left_subtree.value!=q) or
-					left_subtree.key==root.key):
-				return left_subtree
-			if left_subtree.value!=root.value:
+			if ((!left.equals(p) and !left.equals(q)) or
+					left.equals(root)):
+				return left
+			if !left.equals(root):
 				return root
 		# else flag != 1
-		return left_subtree
+		return left
 	# END find_LCA
 # END BinaryTree
