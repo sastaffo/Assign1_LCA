@@ -8,7 +8,7 @@ class Node:
 	# END __init__
 
 	def equals(self, node):
-		if node == None: return False
+		if node is None: return False
 		if self.key == node.key:
 			return True
 		return False
@@ -37,7 +37,7 @@ class BinaryTree:
 
 	def __compare_nodes(self, node1, node2):
 		# recursively compares node1 in the tree with node2 from another tree
-		if node1 == None and node2 == None: return True
+		if node1 is None and node2 is None: return True
 		if (node1.key.equals(node2.key) and
 				node1.is_parent == node2.is_parent and
 				self.__compare_nodes(node1.left_child, node2.left_child) and
@@ -54,12 +54,12 @@ class BinaryTree:
 
 	def __contains_rec(self, goal_node, currentNode):
 		#recursively finds the node with the passed key
-		if currentNode == None: return None
+		if currentNode is None: return None
 		if goal_node.equals(currentNode): return currentNode
 
 		if currentNode.is_parent:
 			found_node = self.__contains_rec(goal_node, currentNode.left_child)
-			if found_node == None:
+			if found_node is None:
 				found_node = self.__contains_rec(
 								goal_node, currentNode.right_child)
 			# END if
@@ -69,7 +69,11 @@ class BinaryTree:
 	# END __contains_rec
 
 	def find_LCA(self, p, q):
-		self.__find_LCA(self.head, p, q)
+		p_found = self.contains(p)
+		q_found = self.contains(q)
+		if p_found is None or q_found is None
+			return None
+		return self.__find_LCA(self.head, p, q)
 	# END find_LCA
 
 	# code adapted from https://stackoverflow.com/a/46454780
