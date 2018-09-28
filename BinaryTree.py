@@ -8,6 +8,7 @@ class Node:
 	# END __init__
 
 	def equals(self, node):
+		if node == None: return False
 		if self.key == node.key:
 			return True
 		return False
@@ -64,8 +65,12 @@ class BinaryTree:
 		return None
 	# END __contains_rec
 
+	def find_LCA(self, p, q):
+		self.__find_LCA(self.head, p, q)
+	# END find_LCA
+
 	# code adapted from https://stackoverflow.com/a/46454780
-	def find_LCA(self, root, p, q):
+	def __find_LCA(self, root, p, q):
 		# finds the LCA of the 2 nodes passed, returns node that is LCA
 		if root is None: return None
 		flag=0
@@ -74,8 +79,8 @@ class BinaryTree:
 			#indicates later to return root
 		# END if
 
-		left = self.find_LCA(root.left_child, p, q)
-		right = self.find_LCA(root.right_child, p, q)
+		left = self.__find_LCA(root.left_child, p, q)
+		right = self.__find_LCA(root.right_child, p, q)
 
 		if left is None and right is None:
 			if flag==0: return None
@@ -87,22 +92,22 @@ class BinaryTree:
 
 		if left is None:
 			if flag==1:
-				if ((!right.equals(p) and !right.equals(q)) or
+				if ((not right.equals(p) and not right.equals(q)) or
 						right.equals(root)):
 					return right
-				if !right.equals(root):
+				if not right.equals(root):
 					return root
 			# else flag != 1
 			return right
 
 		# else right is None:
 		if flag==1:
-			if ((!left.equals(p) and !left.equals(q)) or
+			if ((not left.equals(p) and not left.equals(q)) or
 					left.equals(root)):
 				return left
-			if !left.equals(root):
+			if not left.equals(root):
 				return root
 		# else flag != 1
 		return left
-	# END find_LCA
+	# END __find_LCA
 # END BinaryTree
