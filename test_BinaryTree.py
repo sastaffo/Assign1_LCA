@@ -65,10 +65,10 @@ class TestBinaryTree(unittest.TestCase):
 	# END test_contains
 
 	def test_find_LCA(self):
-		self.assertEqual(self.binary_tree.find_LCA(Node('D'), Node('C')),
-							self.binary_tree.head)
-		self.assertEqual(self.binary_tree.find_LCA(Node('D'), Node('E')),
-							Node('B'))
+		self.assertTrue(self.binary_tree.head.equals(
+				self.binary_tree.find_LCA(Node('D'), Node('C'))))
+		self.assertTrue(Node('B').equals(
+				self.binary_tree.find_LCA(Node('D'), Node('E'))))
 	# END test_find_LCA
 
 	def test_find_LCA_invalid(self):
@@ -78,12 +78,12 @@ class TestBinaryTree(unittest.TestCase):
 	# END test_find_LCA_invalid
 
 	def test_find_LCA_self(self):
-		self.assertEqual(self.binary_tree.find_LCA(Node('B'), Node('D')),
-							Node('B'))
+		self.assertTrue(Node('B').equals(
+				self.binary_tree.find_LCA(Node('B'), Node('D'))))
 	# END test_find_LCA_self
 
 	def test_find_LCA_same(self):
-		self.assertEqual(self.binary_tree.find_LCA(Node('C'), Node('C')),
-							Node('C'))
+		self.assertTrue(Node('C').equals(
+				self.binary_tree.find_LCA(Node('C'), Node('C'))))
 	# END test_find_LCA_same
 # END TestBinaryTree
