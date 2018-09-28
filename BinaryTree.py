@@ -15,13 +15,19 @@ class Node:
 	# END equals
 
 	def add_left_child(self, left_child):
+		# if null is passed, child is deleted
 		self.left_child = left_child
-		self.is_parent = True
+		if left_child is not None: self.is_parent = True
+		# if node has no other child and left_child is now null
+		elif self.right_child is None: self.is_parent = False
 	# END add_left_child
 
 	def add_right_child(self, right_child):
+		# if null is passed, child is deleted
 		self.right_child = right_child
-		self.is_parent = True
+		if right_child is not None: self.is_parent = True
+		# if node has no other child and right_child is now null
+		elif self.left_child is None: self.is_parent = False
 	# END add_right_child
 # END Node
 
@@ -32,13 +38,14 @@ class BinaryTree:
 	# END __init__
 
 	def equals(self, tree):
-		return self.head.__compare_nodes(tree.head)
+		if tree is None: return False
+		return self.__compare_nodes(self.head, tree.head)
 	# END equals
 
 	def __compare_nodes(self, node1, node2):
 		# recursively compares node1 in the tree with node2 from another tree
 		if node1 is None and node2 is None: return True
-		if (node1.key.equals(node2.key) and
+		if (node1.equals(node2) and
 				node1.is_parent == node2.is_parent and
 				self.__compare_nodes(node1.left_child, node2.left_child) and
 				self.__compare_nodes(node1.right_child, node2.right_child)):
