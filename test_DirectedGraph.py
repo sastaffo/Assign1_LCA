@@ -16,8 +16,8 @@ class TestNode(unittest.TestCase):
 		self.assertTrue(self.node.equals(Node('A')))
 		self.assertFalse(self.node.equals(Node('E')))
 
-	def test_is_parent(self):
-		self.assertFalse(self.node.is_parent)
+	def test_add_edge_to(self):
+		self.assertEqual()
 		self.node.add_left_child(None)
 		# node should not be a parent if a None child is added
 		self.assertFalse(self.node.is_parent)
@@ -52,18 +52,14 @@ class TestNode(unittest.TestCase):
 # END TestNode
 
 
-class TestBinaryTree(unittest.TestCase):
+class TestDirectedGraph(unittest.TestCase):
 	def setUp(self):
 		# sets up object to be tested
-		self.binary_tree = BinaryTree(Node('A'))
-		self.binary_tree.head.add_left_child(Node('B'))
-		self.binary_tree.head.add_right_child(Node('C'))
-		self.binary_tree.head.left_child.add_left_child(Node('D'))
-		self.binary_tree.head.left_child.add_right_child(Node('E'))
+		self.digraph = DirectedGraph(Node('A'))
 		#          'A'
 		#         /  \
 		#      'B'   'C'
-		#     /  \
+		#     /  \  /
 		#  'D'   'E'
 	# END setUp
 
@@ -93,6 +89,19 @@ class TestBinaryTree(unittest.TestCase):
 		# contains all nodes from self.binary_tree in the wrong order
 		self.assertFalse(self.binary_tree.equals(tree))
 	# END test_equals
+
+	def test_add_node(self):
+		self.digraph.add_node(Node('B'))
+		self.assertEqual(self.digraph.nodes, [Node('A'), Node('B')])
+		self.digraph.add_node(None)
+		self.assertEqual(self.digraph.nodes, [Node('A'), Node('B')])
+	# END test_add_node
+
+	def test_add_edge(self):
+		self.digraph.add_node(Node('B'))
+		self.digraph.add_edge(Node('A'),Node('B'))
+		self.assertEqual()
+	# END test_add_edge
 
 	def test_contains(self):
 		 # test for head
