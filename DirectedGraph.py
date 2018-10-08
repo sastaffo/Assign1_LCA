@@ -15,7 +15,7 @@ class Node:
 	# END __add_edge_from
 # END Node
 
-class BinaryTree:
+class DirectedGraph:
 	def __init__(self, head):
 		self.source = head
 		self.nodes = []
@@ -45,8 +45,11 @@ class BinaryTree:
 		# END if
 	# END add_node
 
+	def add_edge_key(self, to_key, from_key):
+		self.add_edge_key(Node(to_key), Node(from_key))
+
 	def add_edge(self, to, from):
-		if edge is None: return
+		if to is None or from is None: return
 		if self.contains(to) and self.contains(from):
 			self.edges[from] = to
 			from.__add_edge_to(to)
