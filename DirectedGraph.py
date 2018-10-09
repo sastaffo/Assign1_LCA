@@ -22,22 +22,16 @@ class DirectedGraph:
 		self.edges = {}
 	# END __init__
 
-	def equals(self, tree):
-		if tree is None: return False
-		return self.__compare_nodes(self.source, tree.source)
-	# END equals
-
-	def __compare_nodes(self, p, q):
-		# recursively compares node1 in the tree with node2 from another tree
-		if p is None and q is None: return True
-		if (p.equals(q) and
-				node1.is_parent == node2.is_parent and
-				self.__compare_nodes(node1.left_child, node2.left_child) and
-				self.__compare_nodes(node1.right_child, node2.right_child)):
-			return True
+	def equals(self, digraph):
+		if digraph is None: return False
+		if set(self.nodes) == set(digraph.nodes):
+			return self.__compareEdges(digraph)
 		# END if
 		return False
-	# END __compare_nodes
+	# END equals
+
+	def __compareEdges(self, digraph):
+		return False
 
 	def add_node(self, node):
 		if none is not None:
@@ -46,7 +40,7 @@ class DirectedGraph:
 	# END add_node
 
 	def add_edge_key(self, to_key, from_key):
-		self.add_edge_key(Node(to_key), Node(from_key))
+		self.add_edge(Node(to_key), Node(from_key))
 
 	def add_edge(self, to, from):
 		if to is None or from is None: return
