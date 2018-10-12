@@ -16,84 +16,112 @@ class TestNode(unittest.TestCase):
 		self.assertTrue(self.node.equals(Node('A')))
 		self.assertFalse(self.node.equals(Node('E')))
 
-	def test_add_edge_to(self):
-		self.assertEqual()
-		self.node.add_left_child(None)
-		# node should not be a parent if a None child is added
-		self.assertFalse(self.node.is_parent)
+	#def test_add_edge_to(self):
+		# TODO write tests here
+	# END test_add_edge_to
 
-		self.node.add_left_child(Node('B'))
-		self.assertTrue(self.node.is_parent)
-
-		self.node.add_left_child(None)
-		# node should not be parent is child has been replaced with None
-		self.assertFalse(self.node.is_parent)
-
-		self.node.add_left_child(Node('B'))
-		self.node.add_right_child(Node('C'))
-		self.assertTrue(self.node.is_parent)
-
-		self.node.add_left_child(None)
-		# node should still be parent if only one child is replaced with None
-		self.assertTrue(self.node.is_parent)
-	# END test_is_parent
-
-	def test_add_left_child(self):
-		self.assertFalse(self.node.left_child)
-		self.node.add_left_child(Node('B'))
-		self.assertTrue(self.node.left_child.equals(Node('B')))
-	# END test_add_left_child
-
-	def test_add_right_child(self):
-		self.assertFalse(self.node.right_child)
-		self.node.add_right_child(Node('C'))
-		self.assertTrue(self.node.right_child.equals(Node('C')))
-	# END test_add_right_child
 # END TestNode
 
 
 class TestDirectedGraph(unittest.TestCase):
 	def setUp(self):
-		# sets up object to be tested
-		self.digraph = DirectedGraph(Node('A'))
+		# sets up objects to be tested
+		self.digraph_building = DirectedGraph()
+		# {empty}
+
+		self.digraph1 = DirectedGraph()
+		self.digraph1.nodes = [	Node('A'),  Node('B'),  Node('C'),
+								Node('D'),  Node('E') ]
+		self.digraph1.edges = {	Node('A') : Node('B'),
+								Node('A') : Node('C'),
+								Node('B') : Node('D'),
+								Node('B') : Node('E'),
+								Node('C') : Node('E')}
 		#          'A'
 		#         /  \
 		#      'B'   'C'
 		#     /  \  /
 		#  'D'   'E'
+
+		self.digraph2 = DirectedGraph()
+		self.digraph2.nodes = [	Node('A'), Node('B'), Node('C'), Node('D') ]
+		self.digraph2.edges = { Node('A') : Node('B'),
+								Node('A') : Node('C'),
+								Node('B') : Node('C'),
+								Node('C') : Node('D')}
+		#     'A'
+		#    /  \
+		# 'B' -- 'C' -- 'D'
 	# END setUp
 
 
 	def test_equals(self):
-		self.assertFalse(self.digraph.equals(None))
-		# ADD more tests here
+		self.assertFalse(self.digraph1.equals(None))
+		self.assertFalse(self.digraph1.equals(self.digraph2))
+		# TODO add more tests here
+
+		self.assertTrue(self.digraph_building.equals(DirectedGraph()))
+		# TODO add more tests here
 	# END test_equals
 
+
 	def test_add_node(self):
-		self.digraph.add_node(Node('B'))
-		self.assertEqual(self.digraph.nodes, [Node('A'), Node('B')])
-		self.digraph.add_node(None)
-		self.assertEqual(self.digraph.nodes, [Node('A'), Node('B')])
+		self.assertFalse(self.digraph_building.nodes)
+		# add two nodes
+		self.digraph_building.add_node(Node('A'))
+		self.digraph_building.add_node(Node('B'))
+		self.assertEqual(self.digraph_building.nodes, [Node('A'), Node('B')])
+
+		# add null node
+		self.digraph_building.add_node(None)
+		self.assertEqual(self.digraph_building.nodes, [Node('A'), Node('B')])
 	# END test_add_node
 
 	def test_add_edge(self):
-		self.digraph.add_node(Node('B'))
-		self.digraph.add_edge(Node('A'),Node('B'))
-		self.assertEqual(self.digraph.edges, {Node('A'): Node('B')})
+		# add new edge
+		self.digraph_building.add_node(Node('A'))
+		self.digraph_building.add_node(Node('B'))
+		self.digraph_building.add_edge(Node('A'),Node('B'))
+		self.assertEqual(self.digraph_building.edges, {Node('A'): Node('B')})
+
+		# add existing edge: should not change edge map
+		expected_edges = {	Node('A') : Node('B'),
+							Node('A') : Node('C'),
+							Node('B') : Node('D'),
+							Node('B') : Node('E'),
+							Node('C') : Node('E')
+						 }
+		# check equality before making changes
+		self.assertEqual(self.digraph1.edges, expected_edges)
+		self.digraph1.add_edge(Node('A'), Node('B'))
+		self.assertEqual(self.digraph1.edges, expected_edges)
+
+		# add edge to None: should not change edge map
+		self.digraph1.add_edge(Node('C'), None)
+		self.assertEqual(self.digraph1.edges, expected_edges)
+
+		# add edge to invalid node: should not change edge map
+		self.digraph1.add_edge(Node('C'), Node('G'))
+		self.assertEqual(self.digraph1.edges, expected_edges)
 	# END test_add_edge
 
 	def test_add_edge_key(self):
-		self.digraph.add_node(Node('B'))
-		self.digraph.add_edge_key('A','B')
-		self.assertEqual(self.digraph.edges, {Node('A'): Node('B')})
+		self.digraph_building.add_node(Node('A'))
+		self.digraph_building.add_node(Node('B'))
+		self.digraph_building.add_edge_key('A','B')
+		self.assertEqual(self.digraph_building.edges, {Node('A'): Node('B')})
+		self.digraph_building.add_node(Node('B'))
 
 	def test_contains(self):
-		 # test for head
-		self.assertTrue(self.binary_tree.contains(Node('A')))
-		# test for child
-		self.assertTrue(self.binary_tree.contains(Node('D')))
+		 # test for source
+		self.assertTrue(self.digraph_building.contains(Node('A')))
 		# test for non-valid
-		self.assertFalse(self.binary_tree.contains(Node('F')))
+		self.assertFalse(self.digraph_building.contains(Node('D')))
+
+		# test for source
+		self.assertTrue(self.digraph1.contains(Node('A')))
+
+
 	# END test_contains
 
 	def test_find_LCA(self):
