@@ -16,8 +16,7 @@ class Node:
 # END Node
 
 class DirectedGraph:
-	def __init__(self, head):
-		self.source = head
+	def __init__(self):
 		self.nodes = []
 		self.edges = {}
 	# END __init__
@@ -30,6 +29,7 @@ class DirectedGraph:
 		return False
 	# END equals
 
+	# TODO
 	def __compareEdges(self, digraph):
 		return False
 
