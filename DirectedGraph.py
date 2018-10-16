@@ -24,22 +24,46 @@ class DirectedGraph:
 
 	def equals(self, digraph):
 		if digraph is None: return False
-		if set(self.nodes) == set(digraph.nodes):
-			return self.__compareEdges(digraph)
+		if self.__compare_nodes(digraph.nodes):
+			return self.__compare_edges(digraph.edges)
 		# END if
 		return False
 	# END equals
 
 	# TODO
-	def __compareEdges(self, digraph):
-		for from_node, to_node in self.edges & digraph.edges:
-			if (not self.edges[from_node].equals(digraph[from_node])
-					and not self.edges[to_node].equals(digraph[to_node])):
-				return False
+	def __compare_edges(self, cmp_dict):
+		for from_self, to_self in self.edges:
+			for from_dict in cmp_dict:
+				if (not from_self.equals(from_dict)
+						and not to_self.equals(cmp_dict[from_dict]):
+					continue
+				else:
+					cmp_dict[from_dict] = None
+					break
 			# END if
 		# END for
+		for _, x in cmp_dict:
+			if x is not None: return False
 		return True
-	# END __compareEdges
+	# END __compare_edges
+
+	def __compare_nodes(self, cmp_list):
+		if cmp_list is None: return False
+		if len(cmp_list)!=len(self.nodes): return False
+		for n in self.nodes:
+			for i in range(0, len(cmp_list)):
+				if not n.equals(cmp_list[i]): continue
+				else:
+					cmp_list[i] = None
+					break
+				# END if/else
+			# END inner for
+		# END outer for
+		for x in list:
+			if x is not None: return False
+		# END for
+		return True
+
 
 	def add_node(self, node):
 		if node is not None:
@@ -98,12 +122,11 @@ class DirectedGraph:
 	# https://gist.github.com/mdsrosa/c71339cb23bc51e711d8
 	def shortest_path(self, dest):
 		paths = self.generate_paths()
-		path = deque()
-		path.append(self.source)
-		_dest = paths[] # TODO fix indexing
-		while not dest_p.equals(self.source):
+		path = [self.source]
+		_dest = paths[dest] # TODO fix indexing
+		while not _dest.equals(self.source):
 			path.append(_dest)
-			_dest = paths[] # TODO fix indexing
+			_dest = paths[_dest] # TODO fix indexing
 		# END while
 		path.append(dest)
 		return path
@@ -114,7 +137,7 @@ class DirectedGraph:
 	def generate_paths(self):
 		visited = {self.source: 0}
 		paths = {}
-		tmp_nodes = self.nodes
+		tmp_nodes = set(self.nodes)
 
 		while tmp_nodes:
 			min_node = None
@@ -129,7 +152,7 @@ class DirectedGraph:
 			if min_node is None: break
 
 			tmp_nodes.remove(min_node)
-			for edge in graph.edges[min_node]:
+			for edge in min_node.has_edge_to:
 				if edge not in visited:
 					paths[edge] = min_node
 				# END if
