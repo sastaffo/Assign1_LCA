@@ -32,17 +32,51 @@ class TestDirectedGraph(unittest.TestCase):
 		self.digraph = DirectedGraph()
 		self.digraph.nodes = [	Node('A'),  Node('B'),  Node('C'),
 								Node('D'),  Node('E') ]
-		self.digraph.edges = {	Node('A') : Node('B'),
-								Node('A') : Node('C'),
-								Node('B') : Node('D'),
-								Node('B') : Node('E'),
-								Node('C') : Node('E')}
+		self.digraph.edges = {	'A':'B', 'A':'C',
+								'B':'D', 'B':'E',
+								'C':'E'}
 		#          'A'
 		#         /  \
 		#      'B'   'C'
 		#     /  \  /
 		#  'D'   'E'
 	# END setUp
+
+	def test_compare_nodes(self):
+		# nodes in correct order
+		nodesA = [Node('A'), Node('B'), Node('C'), Node('D'), Node('E')]
+		self.assertTrue(self.digraph.compare_nodes(nodesA))
+
+		# change one node in list to duplicate existing node
+		nodesA[2] = Node('D')
+		self.assertFalse(self.digraph.compare_nodes(nodesA))
+
+		# add a node so lists have different lengths
+		nodesA[5] = Node('F')
+		self.assertFalse(self.digraph.compare_nodes(nodesA))
+
+		# nodes in different order: should be true
+		nodesB = [Node('B'), Node('E'), Node('A'), Node('D'), Node('C')]
+		self.assertTrue(self.digraph.compare_nodes(nodesB))
+	# END test_compare_nodes
+
+	def test_compare_edges(self):
+		# edges in correct order
+		edgesA = {'A':'B', 'A':'C', 'B':'D', 'B':'E', 'C':'E'}
+		self.assertTrue(self.digraph.compare_edges(edgesA))
+
+		# change one edge
+		edgesA['C'] = 'A'
+		self.assertFalse(self.digraph.compare_edges(edgesA))
+
+		# add an edge so dicts are different size
+		edgesA.update({'A':'E'})
+		self.assertFalse(self.digraph.compare_edges(edgesA))
+
+		# edges in a different order: should be true
+		edgesB = {'A':'C', 'B':'E', 'A':'B', 'C':'E', 'B': 'D'}
+		self.assertTrue(self.digraph.compare_edges(edgesB))
+	# END test_compare_edges
 
 
 	def test_equals(self):
@@ -60,48 +94,46 @@ class TestDirectedGraph(unittest.TestCase):
 		# add two nodes
 		self.digraph_building.add_node(Node('A'))
 		self.digraph_building.add_node(Node('B'))
-		self.assertTrue(compare_nodes_list(
-				self.digraph_building.nodes, [Node('A'), Node('B')]))
+		self.assertTrue(self.digraph_building.compare_nodes(
+						[Node('A'), Node('B')]))
 
 		# add null node
 		self.digraph_building.add_node(None)
-		self.assertTrue(compare_nodes_list(
-				self.digraph_building.nodes, [Node('A'), Node('B')]))
+		self.assertTrue(self.digraph_building.compare_nodes(
+						[Node('A'), Node('B')]))
 	# END test_add_node
 
 	def test_add_edge(self):
 		# add new edge
 		self.digraph_building.add_node(Node('A'))
 		self.digraph_building.add_node(Node('B'))
-		self.digraph_building.add_edge(Node('A'),Node('B'))
-		self.assertTrue(compare_edges_dict(
-				self.digraph_building.edges, {Node('A'): Node('B')}))
+		self.digraph_building.add_edge('A','B')
+		self.assertTrue(self.digraph_building.compare_edges({'A':'B'}))
 
 		# add existing edge: should not change edge map
 		expected_edges = self.digraph.edges
 		# check equality before making changes
-		self.digraph.add_edge(Node('A'), Node('B'))
-		self.assertTrue(compare_edges_dict(
-				self.digraph.edges, expected_edges))
+		self.digraph.add_edge('A','B')
+		self.assertTrue(self.digraph.compare_edges(expected_edges))
 
 		# add edge to None: should not change edge map
-		self.digraph.add_edge(Node('C'), None)
-		self.assertTrue(compare_edges_dict(
-				self.digraph.edges, expected_edges))
+		self.digraph.add_edge('C', None)
+		self.assertTrue(self.digraph.compare_edges(expected_edges))
 
 		# add edge to invalid node: should not change edge map
-		self.digraph.add_edge(Node('C'), Node('G'))
-		self.assertTrue(compare_edges_dict(
-				self.digraph.edges, expected_edges))
+		self.digraph.add_edge('C','G')
+		self.assertTrue(self.digraph.compare_edges(expected_edges))
+
+		# add edge from node to itself: not valid, should not change edge map
+		self.digraph.add_edge('D','D')
+		self.assertTrue(self.digraph.compare_edges(expected_edges))
 	# END test_add_edge
 
-	def test_add_edge_key(self):
+	def test_add_edge_node(self):
 		self.digraph_building.add_node(Node('A'))
 		self.digraph_building.add_node(Node('B'))
-		self.digraph_building.add_edge_key('A','B')
-		self.assertTrue(compare_edges_dict(
-				self.digraph_building.edges, {Node('A'): Node('B')}))
-		self.digraph_building.add_node(Node('B'))
+		self.digraph_building.add_edge_node(Node('A'),Node('B'))
+		self.assertTrue(self.digraph_building.compare_edges({'A':'B'}))
 
 	def test_contains(self):
 		# test for none
@@ -140,19 +172,3 @@ class TestDirectedGraph(unittest.TestCase):
 	# END test_find_LCA_same
 
 # END TestBinaryTree
-
-def compare_nodes_list(a, b):
-	for x in a & b:
-		if not (a[x].equals(b[x])): return False
-	# END for
-	return True
-# END compare_nodes_list
-
-def compare_edges_dict(a_dict, b_dict):
-	a = a_dict.items()
-	b = b_dict.items()
-	for x in a & b:
-		if ((not a[x[0]].equals(b[x[0]]))
-				and (not a[x[1]].equals(b[x[1]]))):
-			return False
-# END compare_edges_dict
