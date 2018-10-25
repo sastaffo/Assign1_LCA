@@ -1,34 +1,16 @@
 from collections import deque
-class Node:
-	def __init__(self, key):
-		self.key = key
-		self.has_edge_to = [] # list of KEYS
-	# END __init__
-
-	def equals(self, node):
-		if node is None: return False
-		return self.key == node.key
-	# END equals
-
-	def add_edge_to(self, key):
-		if key is not None:
-			for x in self.has_edge_to:
-				if x==key: return
-			self.has_edge_to.append(key)
-	# END __add_edge_to
-# END Node
 
 class DirectedGraph:
 	def __init__(self):
 		self.source = None # Any node that has no edges TO it
 		self.nodes = [] # list of nodes
-		self.edges = {} # dictionary of KEYS of nodes = from_key:to_key
+		self.edges = {} # dictionary of KEYS of nodes = _from:[_to,_to]
 	# END __init__
 
 	def equals(self, digraph):
-		if digraph is None: return False
-		if self.compare_nodes(digraph.nodes):
-			return self.compare_edges(digraph.edges)
+		if digraph is not None:
+			if set(self.nodes)==set(digraph.nodes):
+				return self.compare_edges(digraph.edges)
 		# END if
 		return False
 	# END equals
@@ -37,72 +19,48 @@ class DirectedGraph:
 	def compare_edges(self, cmp_dict):
 		if cmp_dict is None: return False
 		if len(cmp_dict)!=len(self.edges): return False
-		for from_self, to_self in self.edges:
+		for from_self, to_list in self.edges.items():
 			for from_dict in cmp_dict:
-				if (not from_self==from_dict
-						and not to_self==cmp_dict[from_dict]):
-					continue
-				else:
-					cmp_dict[from_dict] = None
-					break
+				for to_self in to_list:
+					if not from_self==from_dict:
+						continue
+					else:
+						break
 			# END if
 		# END for
-		for _, x in cmp_dict:
+		for _, x in cmp_dict.items():
 			if x is not None: return False
 		return True
 	# END __compare_edges
 
-	def compare_nodes(self, cmp_list):
-		if cmp_list is None: return False
-		if len(cmp_list)!=len(self.nodes): return False
-		for n in self.nodes:
-			for i in range(len(cmp_list)):
-				if not n.equals(cmp_list[i]): continue
-				else:
-					cmp_list[i] = None
-					break
-				# END if/else
-			# END inner for
-		# END outer for
-		for x in cmp_list:
-			if x is not None: return False
-		# END for
-		return True
-
-
 	def add_node(self, node):
 		if node is not None:
-			for x in self.nodes:
-				if x.equals(node): return
-			self.nodes.append(node)
+			if node not in self.nodes:
+				self.nodes.append(node)
 		# END if
 	# END add_node
 
-	def add_edge(self, from_key, to_key):
-		if from_key is None or to_key is None: return
-		from_node = self.contains(Node(from_key))
-		to_node = self.contains(Node(to_key))
-		if from_node is not None and to_node is not None:
-			for from_exists, to_exists in self.edges.items():
-				if (from_exists==from_key and to_exists==to_key):
-					return
-			self.edges.update({from_key:to_key})
-			from_node.add_edge_to(to_key)
-			if self.source is None or self.source.equals(to_node):
+	def add_edge(self, _from, _to):
+		if _from is None or _to is None: return
+		bool_from, _ = self.contains(_from)
+		bool_to, _ = self.contains(_to)
+		if bool_from and bool_to:
+			if _from in self.edges:
+				self.edges[_from].append(_to)
+			else:
+				self.edges.update({_from:[_to]})
+			# END if
+			if self.source is None or self.source==_to:
 				self.set_source()
 			# END if
 		# END if
 	# END add_edge
 
-	def add_edge_node(self, from_node, to_node):
-		self.add_edge(from_node.key, to_node.key)
-	# END add_edge_node
-
 	def set_source(self):
 		for x in self.nodes:
 			source_found = True
-			for from_key, to_key in self.edges.items():
-				if x.key==to_key: source_found = False
+			for _from, _to in self.edges.items():
+				if x==_to: source_found = False
 			if source_found:
 				self.source = x
 				return
@@ -110,15 +68,12 @@ class DirectedGraph:
 		# if no new source found, graph is cyclic
 		raise ValueError('Graph has no source, graph is cyclic.')
 
-	def contains(self, goal_node):
+	def contains(self, goal):
 		# checks if node with passed key is in the tree, returns boolean
 		# returns True if None is passed when nodes list is empty
-		if goal_node is None:
-			return len(self.nodes)==0
-		for x in self.nodes:
-			if x.equals(goal_node): return goal_node
-		# END for
-		return None
+		if goal is None: return (len(self.nodes)==0),None
+		if goal in self.nodes: return True,goal
+		return False,None
 	# END contains
 
 	def find_LCA(self, p, q):
@@ -127,17 +82,24 @@ class DirectedGraph:
 		path_p = self.shortest_path(p)
 		path_q = self.shortest_path(q)
 		for i in range(len(path_p)):
-			if not path_p[i].equals(path_q[i]):
+			if not path_p[i]==path_q[i]:
 				return path_p[i-1]
 	# END find_LCA
 
 	# based on code from
 	# https://gist.github.com/mdsrosa/c71339cb23bc51e711d8
 	def shortest_path(self, dest):
+		print(self.nodes)
+		print(self.edges)
+		if self.source is not None: print(self.source)
+		else: print("no source")
 		paths = self.generate_paths()
+		print(self.source)
 		path = [self.source]
+		print("dest:" + dest)
+		print(paths)
 		_dest = paths[dest] # TODO fix indexing
-		while not _dest.equals(self.source):
+		while not _dest==self.source:
 			path.append(_dest)
 			_dest = paths[_dest] # TODO fix indexing
 		# END while
@@ -149,26 +111,46 @@ class DirectedGraph:
 	# https://gist.github.com/econchick/4666413
 	def generate_paths(self):
 		if self.source is None: self.set_source()
-		visited = [self.source.key]
+		visited = {self.source:0} # let all edges have a weight of 1
+
+		weights = []
+		for _from,_to in self.edges.items():
+			weights.append([_from,_to,1])
 		paths = {}
 		tmp_nodes = set(self.nodes)
+
+	#	weights = {}
+	#	for _from,_to in self.edges.items():
+	#		weights.update({(_from,_to):1})
+	#	paths = {}
+	#	tmp_nodes = set(self.nodes)
 
 		while tmp_nodes:
 			min_node = None
 			for node in tmp_nodes:
-				if node.key in visited:
-					if min_node is None:
+				if node in visited:
+					if (min_node is None or
+							visited[node] < visited[min_node]):
 						min_node = node
 					# END if
+				# END if
 			# END for
 			if min_node is None: break
 
 			tmp_nodes.remove(min_node)
-			for dest_key in min_node.has_edge_to:
-				if dest_key not in visited:
-					paths[dest_key] = min_node.key
-				# END if
-			# END for
+			curr_weight = visited[min_node]
+			min_node_list = self.edges.get(min_node)
+			if min_node_list is not None:
+				for dest_key in min_node_list:
+					try:
+						weight = curr_weight + 1
+					except: continue
+					# END try
+					if dest_key not in visited or weight < visited[dest_key]:
+						visited[dest_key] = weight
+						paths.update({dest_key:min_node})
+					# END if
+				# END for
 		# END while
 		return paths
 	# END generate_paths
