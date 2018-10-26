@@ -1,5 +1,5 @@
 from collections import deque
-
+DEBUG = True
 class DirectedGraph:
 	def __init__(self):
 		self.source = None # Any node that has no edges TO it
@@ -89,13 +89,16 @@ class DirectedGraph:
 	def shortest_path(self, dest):
 		print(self.nodes)
 		print(self.edges)
-		if self.source is not None: print(self.source)
-		else: print("no source")
+		if DEBUG:
+			if self.source is not None: print("init source: " + self.source)
+			else: print("no source")
 		paths = self.generate_paths()
-		print(self.source)
 		path = [self.source]
-		print("dest:" + dest)
-		print(paths)
+		if DEBUG:
+			print("after gen_p source: " + self.source)
+			print("dest: " + dest)
+			print("paths: ")
+			print(paths)
 		_dest = paths[dest] # TODO fix indexing
 		while not _dest==self.source:
 			path.append(_dest)
@@ -108,41 +111,56 @@ class DirectedGraph:
 	# based on dijkstra's algorithm in python
 	# https://gist.github.com/mdsrosa/c71339cb23bc51e711d8
 	def generate_paths(self):
-		if self.source is None: self.set_source()
-		visited = {self.source:0} # let all edges have a weight of 1
+		if self.source is None:
+			if DEBUG: print("	(gen_p) pre-set source: None")
+			self.set_source()
+		elif DEBUG: print("	(gen_p) pre-set source: " + self.source)
+		if DEBUG:
+			print("	(gen_p) post-set source: " + self.source)
+		visited = {self.source:0}
 
+		# let all edges have a weight of 1
 		weights = {}
 		for self_tuple in self.edges:
 			weights[self_tuple]=1
+		if DEBUG:
+			print("	(gen_p) weights: ")
+			for x,y in weights.items():
+				print("(" + ",".join(x) + "): " + str(y))
 		paths = {}
 		tmp_nodes = set(self.nodes)
-
-	#	weights = {}
-	#	for _from,_to in self.edges.items():
-	#		weights.update({(_from,_to):1})
-	#	paths = {}
-	#	tmp_nodes = set(self.nodes)
+		if DEBUG: print(tmp_nodes)
 
 		while tmp_nodes:
 			min_node = None
 			for node in tmp_nodes:
+				if DEBUG: print("\n\n	(gen_p) current node: '"+ node + "'")
 				if node in visited:
+					if DEBUG: print("	(gen_p) 	visited:true")
 					if (min_node is None or
 							visited[node] < visited[min_node]):
+						if DEBUG:
+							if min_node is not None:
+								print("	(gen_p) 	old min: " + min_node)
+							print("	(gen_p) 	new min: " + node)
 						min_node = node
 					# END if
 				# END if
 			# END for
 			if min_node is None: break
+			if DEBUG: print("	(gen_p) 	min_node not None")
 
 			tmp_nodes.remove(min_node)
 			curr_weight = visited[min_node]
+			if DEBUG: print("	(gen_p) 	curr_weight="+ str(curr_weight))
 			min_node_list=[]
 			# finds nodes where there exists an edge from min_node to that node
 			for self_tuple in self.edges:
 				if self_tuple[0]==min_node:
 					min_node_list.append(self_tuple[1])
 			# END for
+			if DEBUG:
+				print("	(gen_p) 	min_node_list: " + ",".join(min_node_list))
 			for _dest in min_node_list:
 				try:
 					weight = curr_weight + weights[(min_node,dest_key)]
@@ -150,7 +168,12 @@ class DirectedGraph:
 					continue
 				if dest_key not in visited or weight < visited[dest_key]:
 					visited[dest_key] = weight
+					if DEBUG: print("	(gen_p) 	new weight for node '"
+									+ dest_key + "' = " + weight)
 					paths.update({dest_key:min_node})
+					if DEBUG:
+						print("	(gen_p) 	paths: ")
+						print(paths)
 				# END if
 			# END for
 		# END while
