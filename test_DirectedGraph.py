@@ -26,11 +26,11 @@ class TestDirectedGraph(unittest.TestCase):
 		self.assertTrue(self.digraph.compare_edges(edgesA))
 
 		# change one edge
-		edgesA[4][1]='A'
+		edgesA[4] = ('C','A')
 		self.assertFalse(self.digraph.compare_edges(edgesA))
 
 		# change one edge to an invalid node
-		edgesA[4][1]='X'
+		edgesA[4] = ('C','X')
 		self.assertFalse(self.digraph.compare_edges(edgesA))
 
 		# add an edge so lists are different size
@@ -98,24 +98,18 @@ class TestDirectedGraph(unittest.TestCase):
 
 
 	def test_contains(self):
-		# test for none
-		b,_ = self.digraph_building.contains(None)
-		self.assertTrue(b)
+		# test for None in empty graph
+		self.assertTrue(self.digraph_building.contains(None))
 		# test for invalid
-		b,_ = self.digraph_building.contains('D')
-		self.assertFalse(b)
+		self.assertFalse(self.digraph_building.contains('D'))
 
-		# test for None
-		b,_ = self.digraph.contains(None)
-		self.assertFalse(b)
+		# test for None in non-empty graph
+		self.assertFalse(self.digraph.contains(None))
 		# test for valid
-		b,_ = self.digraph.contains('A')
-		self.assertTrue(b)
-		b,_ = self.digraph.contains('D')
-		self.assertTrue(b)
+		self.assertTrue(self.digraph.contains('A'))
+		self.assertTrue(self.digraph.contains('D'))
 		# test for invalid
-		b,_ = self.digraph.contains('F')
-		self.assertFalse(b)
+		self.assertFalse(self.digraph.contains('F'))
 	# END test_contains
 
 	def test_find_LCA(self):

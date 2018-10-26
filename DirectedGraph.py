@@ -15,21 +15,25 @@ class DirectedGraph:
 		return False
 	# END equals
 
-
 	def compare_edges(self, other_edges):
-		if other_edges is None: return False
+		if other_edges is None:
+			print("other is None")
+			return False
 		if len(other_edges)!=len(self.edges):
+			print("different lengths")
 			return False
 		for self_tuple in self.edges:
-			for i in len(other_edges):
-				if cmp(self_tuple, other_edges[i])==0:
+			for i in range(len(other_edges)):
+				if tuple_equals(self_tuple, other_edges[i]):
 					other_edges[i] = (None,None)
 					break
 				# END if
 			# END for
 		# END for
-		for _, x in cmp_dict.items():
-			if x is not None: return False
+		for tuple in other_edges:
+			if not tuple_equals(tuple, (None,None)):
+				print("not equal to (None,None)" + ",".join(tuple))
+				return False
 		return True
 	# END __compare_edges
 
@@ -44,7 +48,7 @@ class DirectedGraph:
 		if _from is None or _to is None: return
 		if self.contains(_from) and self.contains(_to):
 			for self_tuple in self.edges:
-				if cmp(self_tuple, (_from,_to))==0:
+				if tuple_equals(self_tuple, (_from,_to)):
 					return
 				# END if
 			# END for
@@ -159,3 +163,10 @@ class DirectedGraph:
 		return paths
 	# END generate_paths
 # END BinaryTree
+
+def tuple_equals(tupleA,tupleB):
+	if len(tupleA)!=len(tupleB): return False
+	for i in range(len(tupleA)):
+		if tupleA[i]!=tupleB[i]: return False
+	return True
+# END tuple_equals
