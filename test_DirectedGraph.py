@@ -1,6 +1,7 @@
 
 from DirectedGraph import DirectedGraph
 import unittest
+from collections import defaultdict
 
 class TestDirectedGraph(unittest.TestCase):
 	def setUp(self):
@@ -10,7 +11,8 @@ class TestDirectedGraph(unittest.TestCase):
 
 		self.digraph = DirectedGraph()
 		self.digraph.nodes = ['A', 'B', 'C', 'D', 'E' ]
-		self.digraph.edges = {'A':['B','C'], 'B':['D','E'], 'C':['E']}
+		self.digraph.edges = [('A','B'), ('A','C'),
+							  ('B','D'), ('B','E'), ('C','E')]
 		#          'A'
 		#         /  \
 		#      'B'   'C'
@@ -20,23 +22,23 @@ class TestDirectedGraph(unittest.TestCase):
 
 	def test_compare_edges(self):
 		# edges in correct order
-		edgesA = {'A':['B','C'], 'B':['D','E'], 'C':['E']}
+		edgesA = [('A','B'), ('A','C'), ('B','D'), ('B','E'), ('C','E')]
 		self.assertTrue(self.digraph.compare_edges(edgesA))
 
 		# change one edge
-		edgesA['C'][i] = 'A'
+		edgesA[4][1]='A'
 		self.assertFalse(self.digraph.compare_edges(edgesA))
 
 		# change one edge to an invalid node
-		edgesA['C'][i] = 'X'
+		edgesA[4][1]='X'
 		self.assertFalse(self.digraph.compare_edges(edgesA))
 
-		# add an edge so dicts are different size
-		edgesA['A'].append('E')
+		# add an edge so lists are different size
+		edgesA.append(('A','E'))
 		self.assertFalse(self.digraph.compare_edges(edgesA))
 
 		# edges in a different order: should be true
-		edgesB = {'B':['E','D'], 'A':['C','B'], 'C':['E']}
+		edgesB = [('B','E'), ('B','D'), ('A','C'), ('A','B'), ('C','E')]
 		self.assertTrue(self.digraph.compare_edges(edgesB))
 	# END test_compare_edges
 
@@ -73,8 +75,7 @@ class TestDirectedGraph(unittest.TestCase):
 		self.digraph_building.add_node('A')
 		self.digraph_building.add_node('B')
 		self.digraph_building.add_edge('A','B')
-		edges = {'A':['B']}
-		self.assertTrue(self.digraph_building.compare_edges(edges))
+		self.assertTrue(self.digraph_building.compare_edges([('A','B')]))
 
 		# add existing edge: should not change edge map
 		expected_edges = self.digraph.edges
@@ -133,5 +134,4 @@ class TestDirectedGraph(unittest.TestCase):
 	def test_find_LCA_same(self):
 		self.assertTrue('C'==(self.digraph.find_LCA('C', 'C')))
 	# END test_find_LCA_same
-
 # END TestBinaryTree
