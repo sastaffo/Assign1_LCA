@@ -16,12 +16,8 @@ class DirectedGraph:
 	# END equals
 
 	def compare_edges(self, other_edges):
-		if other_edges is None:
-			print("other is None")
-			return False
-		if len(other_edges)!=len(self.edges):
-			print("different lengths")
-			return False
+		if other_edges is None: return False
+		if len(other_edges)!=len(self.edges): return False
 		for self_tuple in self.edges:
 			for i in range(len(other_edges)):
 				if tuple_equals(self_tuple, other_edges[i]):
@@ -31,9 +27,7 @@ class DirectedGraph:
 			# END for
 		# END for
 		for tuple in other_edges:
-			if not tuple_equals(tuple, (None,None)):
-				print("not equal to (None,None)" + ",".join(tuple))
-				return False
+			if not tuple_equals(tuple, (None,None)): return False
 		return True
 	# END __compare_edges
 
