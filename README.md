@@ -32,7 +32,7 @@
 >A commit point does not necessitate the pushing of the commit to the online repository at that moment in time.
 >
 >
->**Deadline:** _Tuesday 2nd October_
+>**Deadline:** _Friday 26th October_
 
 
 ***
@@ -51,4 +51,4 @@ I plan to write this code and its unit tests in Python. I have never used Python
 
 ## Design Decisions
 1. A node can be its own Lowest Common Ancestor if the other node(s) is/are a) itself b) a descendent of the node
-2. If one of the nodes is not in the graph, the function will return an error
+2. If one of the nodes is not in the graph, the function will return None
